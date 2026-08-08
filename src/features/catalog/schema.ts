@@ -28,3 +28,15 @@ export const servicePageSchema = z.object({
 
 export type Service = z.infer<typeof serviceSchema>;
 export type Lifecycle = (typeof lifecycleValues)[number];
+
+export const createServiceSchema = z.object({
+  tenantId: z.string().min(1, "Tenant ID is required"),
+  name: z.string().min(1, "Name is required").max(100, "Name is too long"),
+  tier: z.number().int().min(1).max(4),
+  owningTeam: z.string().min(1, "Owning team is required"),
+  onCallRef: z.string().optional(),
+  description: z.string().optional(),
+  repository: z.string().optional(),
+});
+
+export type CreateServiceValues = z.infer<typeof createServiceSchema>;

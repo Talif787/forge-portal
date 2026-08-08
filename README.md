@@ -69,16 +69,3 @@ primitives, schema-validated data layer) and read views for the dashboard,
 services, and tenants. Later phases add create/edit forms with React Hook Form
 and Zod, TanStack Table with sorting and bulk actions, optimistic mutations with
 `If-Match` concurrency, and a command palette.
-
-## Security notes
-
-The critical React Server Components RCE (React2Shell, CVE-2025-66478) and the
-follow-up DoS/source-exposure advisories are patched: this app pins `next@15.1.11`
-and `react@19.0.1`, verified with `npx fix-react2shell-next` ("no vulnerable
-packages found").
-
-The remaining `npm audit` findings are transitive, dev/build-time only, and not
-reachable in the shipped runtime: esbuild's dev-server advisory (via Vitest), and
-copies of postcss and sharp bundled inside Next 15's own dependency tree. The only
-`npm audit fix --force` remedy is a breaking upgrade to Next 16, which is deferred
-rather than applied blindly. This is a deliberate, documented decision.
