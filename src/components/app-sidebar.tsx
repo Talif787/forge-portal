@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Boxes, Building2, LayoutDashboard } from "lucide-react";
+import { Boxes, Building2, LayoutDashboard, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -20,7 +20,19 @@ export function AppSidebar() {
         <div className="h-6 w-6 rounded-md bg-primary" />
         <span className="text-sm font-semibold tracking-tight">Forge</span>
       </div>
-      <nav className="flex flex-1 flex-col gap-1 p-3">
+
+      <div className="p-3">
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent("open-command-palette"))}
+          className="flex w-full items-center gap-2 rounded-lg border bg-background px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+          <Search className="h-4 w-4" />
+          <span>Search...</span>
+          <kbd className="ml-auto rounded border bg-muted px-1.5 py-0.5 text-[10px] font-medium">Ctrl K</kbd>
+        </button>
+      </div>
+
+      <nav className="flex flex-1 flex-col gap-1 px-3">
         {links.map(({ href, label, icon: Icon }) => {
           const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
           return (
@@ -38,6 +50,7 @@ export function AppSidebar() {
           );
         })}
       </nav>
+
       <div className="flex items-center justify-between border-t px-4 py-3">
         <span className="text-xs text-muted-foreground">Control plane</span>
         <ThemeToggle />

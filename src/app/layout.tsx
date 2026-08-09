@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AppProviders } from "@/providers/app-providers";
 import { AppSidebar } from "@/components/app-sidebar";
+import { CommandPalette } from "@/components/command-palette";
 
 export const metadata: Metadata = {
   title: "Forge Portal",
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div className="mx-auto max-w-6xl px-8 py-8">{children}</div>
             </main>
           </div>
+          <CommandPalette />
         </AppProviders>
       </body>
     </html>
