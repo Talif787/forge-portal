@@ -3,9 +3,10 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Boxes, Building2, LayoutDashboard, Moon, Plus, Sun } from "lucide-react";
+import { Boxes, Building2, LayoutDashboard, Moon, Plus, Server, Sun } from "lucide-react";
 import { useServices } from "@/features/catalog/api";
 import { useTenants } from "@/features/tenants/api";
+import { useApplications } from "@/features/applications/api";
 import {
   CommandDialog,
   CommandEmpty,
@@ -23,6 +24,7 @@ export function CommandPalette() {
   // Only fetch the lists while the palette is open.
   const services = useServices();
   const tenants = useTenants();
+  const applications = useApplications();
 
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -82,6 +84,10 @@ export function CommandPalette() {
             <Building2 className="h-4 w-4" />
             Tenants
           </CommandItem>
+          <CommandItem onSelect={() => go("/applications")}>
+            <Server className="h-4 w-4" />
+            Applications
+          </CommandItem>
         </CommandGroup>
 
         {services.data && services.data.items.length > 0 && (
@@ -103,6 +109,22 @@ export function CommandPalette() {
                 <Building2 className="h-4 w-4" />
                 {t.name}
                 <span className="ml-auto text-xs text-muted-foreground">{t.plan}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
+
+        {applications.data && applications.data.items.length > 0 && (
+          <CommandGroup heading="Applications">
+            {applications.data.items.slice(0, 20).map((a) => (
+              <CommandItem
+                key={`${a.namespace}/${a.name}`}
+                value={`application ${a.name}`}
+                onSelect={() => go(`/applications/${a.namespace}/${a.name}`)}
+              >
+                <Server className="h-4 w-4" />
+                {a.name}
+                <span className="ml-auto text-xs text-muted-foreground">{a.phase || "pending"}</span>
               </CommandItem>
             ))}
           </CommandGroup>

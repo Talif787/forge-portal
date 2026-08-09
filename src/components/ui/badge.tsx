@@ -37,6 +37,9 @@ const lifecycleTone: Record<string, BadgeProps["tone"]> = {
   free: "neutral",
   standard: "info",
   enterprise: "brand",
+  // application phases
+  Ready: "success",
+  Progressing: "info",
 };
 
 export function StatusBadge({ value }: { value: string }) {
@@ -46,4 +49,10 @@ export function StatusBadge({ value }: { value: string }) {
 export function TierBadge({ tier }: { tier: number }) {
   const tone: BadgeProps["tone"] = tier === 1 ? "danger" : tier === 2 ? "warning" : tier === 3 ? "info" : "neutral";
   return <Badge tone={tone}>tier {tier}</Badge>;
+}
+
+export function PhaseBadge({ phase }: { phase: string }) {
+  const value = phase || "pending";
+  const tone: BadgeProps["tone"] = value === "Ready" ? "success" : value === "Progressing" ? "info" : "neutral";
+  return <Badge tone={tone}>{value}</Badge>;
 }

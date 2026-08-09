@@ -1,17 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { Activity, Boxes, Building2 } from "lucide-react";
+import { Activity, Boxes, Building2, Server } from "lucide-react";
 import { useServices } from "@/features/catalog/api";
 import { useTenants } from "@/features/tenants/api";
+import { useApplications } from "@/features/applications/api";
 import { useHealth } from "@/features/health/api";
+import { ApiError } from "@/lib/api-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DashboardPage() {
   const services = useServices();
   const tenants = useTenants();
+  const applications = useApplications();
   const health = useHealth();
+
+  const appsUnavailable = applications.error instanceof ApiError && applications.error.status === 503;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -20,7 +25,7 @@ export default function DashboardPage() {
         <p className="mt-1 text-sm text-muted-foreground">Control-plane overview</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Metric
           title="Control plane"
           icon={<Activity className="h-4 w-4" />}
@@ -41,6 +46,13 @@ export default function DashboardPage() {
           loading={tenants.isLoading}
           value={tenants.data?.items.length ?? 0}
           href="/tenants"
+        />
+        <Metric
+          title="Applications"
+          icon={<Server className="h-4 w-4" />}
+          loading={applications.isLoading && !appsUnavailable}
+          value={appsUnavailable ? "n/a" : applications.data?.items.length ?? 0}
+          href="/applications"
         />
       </div>
 
