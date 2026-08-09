@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Boxes, Building2, LayoutDashboard, Search, Server } from "lucide-react";
+import { Boxes, Building2, LayoutDashboard, Search, Server, Workflow } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -11,6 +11,7 @@ const links = [
   { href: "/services", label: "Services", icon: Boxes },
   { href: "/tenants", label: "Tenants", icon: Building2 },
   { href: "/applications", label: "Applications", icon: Server },
+  { href: "/provisioning", label: "Provisioning", icon: Workflow },
 ];
 
 export function AppSidebar() {

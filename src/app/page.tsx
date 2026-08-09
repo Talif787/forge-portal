@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Activity, Boxes, Building2, Server } from "lucide-react";
+import { Activity, Boxes, Building2, Server, Workflow } from "lucide-react";
 import { useServices } from "@/features/catalog/api";
 import { useTenants } from "@/features/tenants/api";
 import { useApplications } from "@/features/applications/api";
+import { useWorkflows } from "@/features/provisioning/api";
 import { useHealth } from "@/features/health/api";
 import { ApiError } from "@/lib/api-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,9 +15,11 @@ export default function DashboardPage() {
   const services = useServices();
   const tenants = useTenants();
   const applications = useApplications();
+  const workflows = useWorkflows();
   const health = useHealth();
 
   const appsUnavailable = applications.error instanceof ApiError && applications.error.status === 503;
+  const provUnavailable = workflows.error instanceof ApiError && workflows.error.status === 503;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -25,7 +28,7 @@ export default function DashboardPage() {
         <p className="mt-1 text-sm text-muted-foreground">Control-plane overview</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <Metric
           title="Control plane"
           icon={<Activity className="h-4 w-4" />}
@@ -53,6 +56,13 @@ export default function DashboardPage() {
           loading={applications.isLoading && !appsUnavailable}
           value={appsUnavailable ? "n/a" : applications.data?.items.length ?? 0}
           href="/applications"
+        />
+        <Metric
+          title="Provisioning"
+          icon={<Workflow className="h-4 w-4" />}
+          loading={workflows.isLoading && !provUnavailable}
+          value={provUnavailable ? "n/a" : workflows.data?.items.length ?? 0}
+          href="/provisioning"
         />
       </div>
 

@@ -3,10 +3,11 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Boxes, Building2, LayoutDashboard, Moon, Plus, Server, Sun } from "lucide-react";
+import { Boxes, Building2, LayoutDashboard, Moon, Plus, Server, Sun, Workflow } from "lucide-react";
 import { useServices } from "@/features/catalog/api";
 import { useTenants } from "@/features/tenants/api";
 import { useApplications } from "@/features/applications/api";
+import { useWorkflows } from "@/features/provisioning/api";
 import {
   CommandDialog,
   CommandEmpty,
@@ -25,6 +26,7 @@ export function CommandPalette() {
   const services = useServices();
   const tenants = useTenants();
   const applications = useApplications();
+  const workflows = useWorkflows();
 
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -88,6 +90,10 @@ export function CommandPalette() {
             <Server className="h-4 w-4" />
             Applications
           </CommandItem>
+          <CommandItem onSelect={() => go("/provisioning")}>
+            <Workflow className="h-4 w-4" />
+            Provisioning
+          </CommandItem>
         </CommandGroup>
 
         {services.data && services.data.items.length > 0 && (
@@ -125,6 +131,22 @@ export function CommandPalette() {
                 <Server className="h-4 w-4" />
                 {a.name}
                 <span className="ml-auto text-xs text-muted-foreground">{a.phase || "pending"}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
+
+        {workflows.data && workflows.data.items.length > 0 && (
+          <CommandGroup heading="Provisioning">
+            {workflows.data.items.slice(0, 20).map((w) => (
+              <CommandItem
+                key={w.workflowId}
+                value={`provisioning ${w.workflowId}`}
+                onSelect={() => go(`/provisioning/${encodeURIComponent(w.workflowId)}`)}
+              >
+                <Workflow className="h-4 w-4" />
+                {w.workflowId}
+                <span className="ml-auto text-xs text-muted-foreground">{w.status}</span>
               </CommandItem>
             ))}
           </CommandGroup>

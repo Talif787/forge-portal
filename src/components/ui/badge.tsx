@@ -56,3 +56,17 @@ export function PhaseBadge({ phase }: { phase: string }) {
   const tone: BadgeProps["tone"] = value === "Ready" ? "success" : value === "Progressing" ? "info" : "neutral";
   return <Badge tone={tone}>{value}</Badge>;
 }
+
+export function WorkflowStatusBadge({ status }: { status: string }) {
+  const tone: BadgeProps["tone"] =
+    status === "Completed"
+      ? "success"
+      : status === "Running"
+        ? "info"
+        : status === "Failed" || status === "Terminated" || status === "TimedOut"
+          ? "danger"
+          : status === "Canceled"
+            ? "warning"
+            : "neutral";
+  return <Badge tone={tone}>{status || "Unknown"}</Badge>;
+}
